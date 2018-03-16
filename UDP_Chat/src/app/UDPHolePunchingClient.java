@@ -41,7 +41,7 @@ public class UDPHolePunchingClient {
 		clientSocket = new DatagramSocket(localPort);
 		clientSocket.setSoTimeout(1000);
 
-		// input thread is used to get input message from user
+		// InputThread is used to get input message from user
 		InputThread inpT = new InputThread(this);
 		new Thread(inpT).start();
 
