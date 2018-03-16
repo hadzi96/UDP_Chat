@@ -17,7 +17,7 @@ public class UDPHolePunchingServer {
 
 		InetAddress IPAddress1 = receivePacket.getAddress();
 		int port1 = receivePacket.getPort();
-		String msgInfoOfClient1 = IPAddress1 + "-" + port1 + "-"; 
+		String msgInfoOfClient1 = IPAddress1 + "-" + port1 + "-";  
 
 		System.out.println("Client1: " + msgInfoOfClient1);
 
