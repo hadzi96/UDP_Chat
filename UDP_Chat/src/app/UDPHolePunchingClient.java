@@ -58,7 +58,7 @@ public class UDPHolePunchingClient {
 				clientSocket.receive(receivePacket);
 				String msg = new String(receivePacket.getData());
 
-				// accepted format *$message$ = message
+				// accepted format *$message$ = messages
 				if (msg.charAt(0) == '*') {
 					msg = msg.substring(msg.indexOf("$") + 1, msg.lastIndexOf("$"));
 					System.out.println("Message: (" + ip + ") : " + msg);
