@@ -44,7 +44,7 @@ public class Client {
 
 	public static void main(String[] args) {
 		try {
-			new Client("192.168.0.15", 6000);
+			new Client("hadziserver.ddns.net", 6000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

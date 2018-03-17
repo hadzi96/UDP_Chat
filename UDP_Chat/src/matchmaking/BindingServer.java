@@ -18,49 +18,84 @@ public class BindingServer implements Runnable {
 
 	@Override
 	public void run() {
-		try {
+		while (true) {
+			try {
 
-			DatagramSocket serverSocket1 = new DatagramSocket(clientPort1);
+				DatagramSocket serverSocket1 = new DatagramSocket(clientPort1);
 
-			System.out.println("Waiting for Client 1 on Port " + serverSocket1.getLocalPort());
+				System.out.println("Waiting for Client 1 on Port " + serverSocket1.getLocalPort());
 
-			DatagramPacket receivePacket = new DatagramPacket(new byte[1024], 1024);
-			p1.out.println(clientPort1 + "");
-			serverSocket1.receive(receivePacket);
+				DatagramPacket receivePacket = new DatagramPacket(new byte[1024], 1024);
+				p1.out.println(clientPort1 + "");
+				serverSocket1.receive(receivePacket);
+				String msg = receivePacket.getData().toString();
+				System.out.println(msg);
 
-			InetAddress IPAddress1 = receivePacket.getAddress();
-			int port1 = receivePacket.getPort();
-			String msgInfoOfClient1 = IPAddress1 + "-" + port1 + "-";
+				InetAddress IPAddress1 = receivePacket.getAddress();
+				int port1 = receivePacket.getPort();
+				String msgInfoOfClient1 = IPAddress1 + "-" + port1 + "-";
 
-			System.out.println("Client1: " + msgInfoOfClient1);
+				System.out.println("Client1: " + msgInfoOfClient1);
 
-			DatagramSocket serverSocket2 = new DatagramSocket(clientPort2);
+				DatagramSocket serverSocket2 = new DatagramSocket(clientPort2);
 
-			System.out.println("Waiting for Client 2 on Port " + serverSocket2.getLocalPort());
+				System.out.println("Waiting for Client 2 on Port " + serverSocket2.getLocalPort());
 
-			receivePacket = new DatagramPacket(new byte[1024], 1024);
-			p2.out.println(clientPort2 + "");
-			serverSocket2.receive(receivePacket);
+				receivePacket = new DatagramPacket(new byte[1024], 1024);
+				p2.out.println(clientPort2 + "");
+				serverSocket2.receive(receivePacket);
 
-			InetAddress IPAddress2 = receivePacket.getAddress();
-			int port2 = receivePacket.getPort();
-			String msgInfoOfClient2 = IPAddress2 + "-" + port2 + "-";
+				InetAddress IPAddress2 = receivePacket.getAddress();
+				int port2 = receivePacket.getPort();
+				String msgInfoOfClient2 = IPAddress2 + "-" + port2 + "-";
 
-			System.out.println("Client2:" + msgInfoOfClient2);
+				System.out.println("Client2:" + msgInfoOfClient2);
 
-			serverSocket1.send(new DatagramPacket(msgInfoOfClient2.getBytes(), msgInfoOfClient2.getBytes().length,
-					IPAddress1, port1));
+				serverSocket1.send(new DatagramPacket(msgInfoOfClient2.getBytes(), msgInfoOfClient2.getBytes().length,
+						IPAddress1, port1));
 
-			serverSocket2.send(new DatagramPacket(msgInfoOfClient1.getBytes(), msgInfoOfClient1.getBytes().length,
-					IPAddress2, port2));
+				serverSocket2.send(new DatagramPacket(msgInfoOfClient1.getBytes(), msgInfoOfClient1.getBytes().length,
+						IPAddress2, port2));
 
-			serverSocket1.close();
-			serverSocket2.close();
+				serverSocket1.close();
+				serverSocket2.close();
+				break;
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				System.out.println("Binding socket blocked.. trying to free socket");
+				sleep(3000);
+				killThread();
+				continue;
+			}
 		}
 
+	}
+
+	private void killThread() {// ubijamo thread koj je zauzeo portove
+		try {
+			DatagramSocket socket = new DatagramSocket();
+			byte[] sendData = "kill".getBytes();
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,
+					InetAddress.getByName("hadziserver.ddns.net"), clientPort1);
+			socket.send(sendPacket);
+
+			sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName("hadziserver.ddns.net"),
+					clientPort2);
+			socket.send(sendPacket);
+
+			socket.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	private void sleep(long t) {
+		try {
+			Thread.sleep(t);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

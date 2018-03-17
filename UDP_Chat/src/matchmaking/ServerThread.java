@@ -42,6 +42,7 @@ public class ServerThread implements Runnable {
 			}
 			sock.close();
 			System.out.println("[" + sock.getInetAddress() + " : " + sock.getPort() + "] Disconnected");
+			//kada se diskonektuje da se proveri i izbaci iz playerPool
 
 		} catch (Exception e) {
 			e.printStackTrace();
