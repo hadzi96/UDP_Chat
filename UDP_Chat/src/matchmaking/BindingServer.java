@@ -28,7 +28,7 @@ public class BindingServer implements Runnable {
 				DatagramPacket receivePacket = new DatagramPacket(new byte[1024], 1024);
 				p1.out.println(clientPort1 + "");
 				serverSocket1.receive(receivePacket);
-				String msg = receivePacket.getData().toString();
+				String msg = new String(receivePacket.getData());
 				System.out.println(msg);
 
 				InetAddress IPAddress1 = receivePacket.getAddress();
