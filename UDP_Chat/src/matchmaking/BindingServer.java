@@ -29,7 +29,8 @@ public class BindingServer implements Runnable {
 				p1.out.println(clientPort1 + "");
 				serverSocket1.receive(receivePacket);
 				String msg = new String(receivePacket.getData());
-				System.out.println(msg);
+				if(msg.charAt(0) == 'k' && msg.charAt(1) == 'e')
+					return;
 
 				InetAddress IPAddress1 = receivePacket.getAddress();
 				int port1 = receivePacket.getPort();
