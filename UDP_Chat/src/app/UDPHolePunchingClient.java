@@ -89,7 +89,7 @@ public class UDPHolePunchingClient {
 
 	public static void main(String[] args) {
 		try {
-			new UDPHolePunchingClient("hadziserver.ddns.net", 7071);
+			new UDPHolePunchingClient("hadziserver.ddns.net", 7070);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
