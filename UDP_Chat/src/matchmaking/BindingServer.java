@@ -64,10 +64,12 @@ public class BindingServer implements Runnable {
 
 				// proveravamo dali treba ova dva playera da povezemo
 				String p2Oponent = msg.split(";")[0];
-				if (!p1Oponent.equals(p2Oponent)) {
-					serverSocket1.close();
-					serverSocket2.close();
-					return;
+				if (!(p2Oponent.equals("random") && p1Oponent.equals("random"))) {
+					if (!(p1Oponent.equals(p2.username) && p2Oponent.equals(p1.username))) {
+						serverSocket1.close();
+						serverSocket2.close();
+						return;
+					}
 				}
 
 				InetAddress IPAddress2 = receivePacket.getAddress();
