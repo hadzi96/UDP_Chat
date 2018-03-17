@@ -2,10 +2,11 @@ package matchmaking;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Server {
 
-	private Player player = null;
+	private HashMap<String, Player> playerPool = new HashMap<>(); // KEY = username ; VALUE = player
 
 	public Server() throws Exception {
 
@@ -25,12 +26,29 @@ public class Server {
 
 	public synchronized void checkPlayers(Player pl) {
 
-		if (player == null) {
-			player = pl;
-			pl.out.println("wait for player");
-		} else {
-			new Thread(new BindingServer(7070, 7071, player, pl)).start(); // ovaj thread povezuje ova dva playera
-			player = null;
+		if (pl.oponent.equals("random")) { // matchmaking with random oponent
+			if (!playerPool.containsKey("random")) {
+				playerPool.put("random", pl);
+				pl.out.println("wait for player");
+			} else {
+				Player player = playerPool.get("random");
+				playerPool.remove("random");
+				new Thread(new BindingServer(7070, 7071, player, pl)).start();
+			}
+
+		} else { // matchmaking with specific user
+			if (!playerPool.containsKey(pl.oponent)) {
+				playerPool.put(pl.username, pl);
+				pl.out.println("wait for player");
+			} else {
+				Player player = playerPool.get(pl.oponent);
+				if (!player.username.equals(pl.oponent)) // ne slazu im se zahtevi
+					return;
+
+				playerPool.remove(pl.oponent);
+				new Thread(new BindingServer(7070, 7071, player, pl)).start();
+			}
+
 		}
 
 	}

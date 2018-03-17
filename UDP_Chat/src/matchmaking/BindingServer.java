@@ -8,6 +8,7 @@ public class BindingServer implements Runnable {
 
 	private int clientPort1, clientPort2;
 	private Player p1, p2;
+	private String msg;
 
 	public BindingServer(int clientPort1, int clientPort2, Player p1, Player p2) {
 		this.clientPort1 = clientPort1;
@@ -28,9 +29,20 @@ public class BindingServer implements Runnable {
 				DatagramPacket receivePacket = new DatagramPacket(new byte[1024], 1024);
 				p1.out.println(clientPort1 + "");
 				serverSocket1.receive(receivePacket);
-				String msg = new String(receivePacket.getData());
-				if(msg.charAt(0) == 'k' && msg.charAt(1) == 'e')
+				msg = new String(receivePacket.getData());
+
+				// ako smo dobili kill naredbu izlazimo
+				if (msg.charAt(0) == 'k' && msg.charAt(1) == 'i' && msg.charAt(2) == 'l' && msg.charAt(3) == 'l') {
+					serverSocket1.close();
 					return;
+				}
+
+				// proveravamo dali treba ova dva playera da povezemo
+				String p1Oponent = msg.split(";")[0];
+				if (!p1Oponent.equals(p2.username)) {
+					serverSocket1.close();
+					return;
+				}
 
 				InetAddress IPAddress1 = receivePacket.getAddress();
 				int port1 = receivePacket.getPort();
@@ -45,6 +57,22 @@ public class BindingServer implements Runnable {
 				receivePacket = new DatagramPacket(new byte[1024], 1024);
 				p2.out.println(clientPort2 + "");
 				serverSocket2.receive(receivePacket);
+				msg = new String(receivePacket.getData());
+
+				// ako smo dobili kill naredbu izlazimo
+				if (msg.charAt(0) == 'k' && msg.charAt(1) == 'i' && msg.charAt(2) == 'l' && msg.charAt(3) == 'l') {
+					serverSocket1.close();
+					serverSocket2.close();
+					return;
+				}
+
+				// proveravamo dali treba ova dva playera da povezemo
+				String p2Oponent = msg.split(";")[0];
+				if (!p2Oponent.equals(p1.username)) {
+					serverSocket1.close();
+					serverSocket2.close();
+					return;
+				}
 
 				InetAddress IPAddress2 = receivePacket.getAddress();
 				int port2 = receivePacket.getPort();
@@ -69,7 +97,7 @@ public class BindingServer implements Runnable {
 				continue;
 			}
 		}
-
+		System.out.println("P2P binding complete");
 	}
 
 	private void killThread() {// ubijamo thread koj je zauzeo portove

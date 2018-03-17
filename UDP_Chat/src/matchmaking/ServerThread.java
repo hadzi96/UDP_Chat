@@ -35,14 +35,16 @@ public class ServerThread implements Runnable {
 				if (msg == null)
 					break;
 
-				if (msg.equals("connect to player")) {
-					Player player = new Player("user", out);
+				if (msg.split(";")[0].equals("connect to player")) {
+					String username = msg.split(";")[1];
+					String oponent = msg.split(";")[2];
+					Player player = new Player(username, oponent, out);
 					server.checkPlayers(player);
 				}
 			}
 			sock.close();
 			System.out.println("[" + sock.getInetAddress() + " : " + sock.getPort() + "] Disconnected");
-			//kada se diskonektuje da se proveri i izbaci iz playerPool
+			// kada se diskonektuje da se proveri i izbaci iz playerPool
 
 		} catch (Exception e) {
 			e.printStackTrace();

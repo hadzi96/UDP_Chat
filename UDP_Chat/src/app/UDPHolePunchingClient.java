@@ -20,9 +20,9 @@ public class UDPHolePunchingClient {
 	private boolean connected = false;
 	private int counter = 0;
 
-	public UDPHolePunchingClient(String serverIp, int serverPort) throws Exception {
+	public UDPHolePunchingClient(String serverIp, int serverPort, String oponent) throws Exception {
 		clientSocket = new DatagramSocket();
-		sendData = "Hello".getBytes();
+		sendData = (oponent+";").getBytes();
 		sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(serverIp), serverPort);
 		clientSocket.send(sendPacket);
 
@@ -89,7 +89,7 @@ public class UDPHolePunchingClient {
 
 	public static void main(String[] args) {
 		try {
-			new UDPHolePunchingClient("hadziserver.ddns.net", 7070);
+			new UDPHolePunchingClient("hadziserver.ddns.net", 7070, "Hello");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
