@@ -104,7 +104,7 @@ public class UDPHolePunchingClient {
 
 	public static void main(String[] args) {
 		try {
-			new UDPHolePunchingClient("192.168.0.15", 7070);
+			new UDPHolePunchingClient("hadziserver.ddns.net", 7070);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
