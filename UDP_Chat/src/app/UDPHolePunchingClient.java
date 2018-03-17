@@ -26,28 +26,13 @@ public class UDPHolePunchingClient {
 		sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(serverIp), serverPort);
 		clientSocket.send(sendPacket);
 
-		while (true) {
-			receivePacket = new DatagramPacket(new byte[1024], 1024);
-			clientSocket.receive(receivePacket);
+		receivePacket = new DatagramPacket(new byte[1024], 1024);
+		clientSocket.receive(receivePacket);
 
-			response = new String(receivePacket.getData());
-			if (response.contains("-")) {
-				splitResponse = response.split("-");
-				ip = InetAddress.getByName(splitResponse[0].substring(1));
-				port = Integer.parseInt(splitResponse[1]);
-				break;
-			}
-			
-			if(response.contains("check"))
-			{
-				ip = receivePacket.getAddress();
-				port = receivePacket.getPort();
-				break;
-			}
-			
-				
-		}
-		
+		response = new String(receivePacket.getData());
+		splitResponse = response.split("-");
+		ip = InetAddress.getByName(splitResponse[0].substring(1));
+		port = Integer.parseInt(splitResponse[1]);
 
 		System.out.println("IP: " + ip + " PORT: " + port);
 
@@ -104,7 +89,7 @@ public class UDPHolePunchingClient {
 
 	public static void main(String[] args) {
 		try {
-			new UDPHolePunchingClient("hadziserver.ddns.net", 7070);
+			new UDPHolePunchingClient("hadziserver.ddns.net", 7071);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
