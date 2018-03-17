@@ -37,12 +37,8 @@ public class BindingServer implements Runnable {
 					return;
 				}
 
-				// proveravamo dali treba ova dva playera da povezemo
+				// cuvamo za proveru
 				String p1Oponent = msg.split(";")[0];
-				if (!p1Oponent.equals(p2.username)) {
-					serverSocket1.close();
-					return;
-				}
 
 				InetAddress IPAddress1 = receivePacket.getAddress();
 				int port1 = receivePacket.getPort();
@@ -68,7 +64,7 @@ public class BindingServer implements Runnable {
 
 				// proveravamo dali treba ova dva playera da povezemo
 				String p2Oponent = msg.split(";")[0];
-				if (!p2Oponent.equals(p1.username)) {
+				if (!p1Oponent.equals(p2Oponent)) {
 					serverSocket1.close();
 					serverSocket2.close();
 					return;
