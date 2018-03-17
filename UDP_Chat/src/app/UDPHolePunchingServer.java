@@ -3,7 +3,6 @@ package app;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.util.Stack;
 
 public class UDPHolePunchingServer {
@@ -14,11 +13,12 @@ public class UDPHolePunchingServer {
 		
 		DatagramSocket serverSocket1 = new DatagramSocket(clientPort1);
 
+		while(true) {
 		System.out.println("Waiting for Client on Port " + serverSocket1.getLocalPort());
 		
 		DatagramPacket receivePacket = new DatagramPacket(new byte[1024], 1024);
 		
-		while(true) {
+		
 		serverSocket1.receive(receivePacket);
 		
 
