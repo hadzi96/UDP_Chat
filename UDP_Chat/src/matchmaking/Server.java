@@ -28,13 +28,11 @@ public class Server {
 
 		if (command.equals("remove")) {
 			if (pl.oponent.equals("random")) {
-				if(playerPool.remove("random", pl))
-					System.out.println(pl.username + " removed");
+				playerPool.remove("random", pl);
 			} else {
-				if(playerPool.remove(pl.username, pl))
-					System.out.println(pl.username + " removed");
+				playerPool.remove(pl.username, pl);
 			}
-			
+
 			return;
 		}
 
