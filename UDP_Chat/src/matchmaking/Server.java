@@ -28,6 +28,7 @@ public class Server {
 
 		if (command.equals("remove")) {
 			playerPool.remove(pl.username);
+			System.out.println(pl.username + "removed");
 			return;
 		}
 
