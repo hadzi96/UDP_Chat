@@ -27,8 +27,8 @@ public class Server {
 	public synchronized void checkPlayers(String command, Player pl) {
 
 		if (command.equals("remove")) {
-			playerPool.remove(pl.username);
-			System.out.println(pl.username + "removed");
+			if ((playerPool.remove(pl.username)) != null)
+				System.out.println(pl.username + "removed");
 			return;
 		}
 
