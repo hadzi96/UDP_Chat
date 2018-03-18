@@ -27,9 +27,11 @@ public class Server {
 	public synchronized void checkPlayers(String command, Player pl) {
 
 		if (command.equals("remove")) {
-			if ((playerPool.remove(pl.username)) != null)
-				System.out.println(pl.username + "removed");
-			return;
+			if (pl.oponent.equals("random")) {
+				playerPool.remove("random", pl);
+			} else {
+				playerPool.remove(pl.username, pl);
+			}
 		}
 
 		if (pl.oponent.equals("random")) { // matchmaking with random oponent
