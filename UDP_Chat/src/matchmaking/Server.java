@@ -34,6 +34,8 @@ public class Server {
 				if(playerPool.remove(pl.username, pl))
 					System.out.println(pl.username + " removed");
 			}
+			
+			return;
 		}
 
 		if (pl.oponent.equals("random")) { // matchmaking with random oponent
