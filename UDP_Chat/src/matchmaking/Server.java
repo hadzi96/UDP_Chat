@@ -28,10 +28,25 @@ public class Server {
 
 	}
 
+	public boolean register(String username, String password) {
+		lock.lock();
+		if (users.containsKey(username)) {
+			lock.unlock();
+			return false;
+		}
+		users.put(username, password);
+
+		lock.unlock();
+		return true;
+	}
+
 	public boolean logIn(String username, String password) {
 		lock.lock();
 		if (users.containsKey(username)) {
-			return true;
+			if (users.get(username).equals(password)) {
+				lock.unlock();
+				return true;
+			}
 		}
 
 		lock.unlock();
@@ -57,7 +72,7 @@ public class Server {
 			} else {
 				Player player = playerPool.get("random");
 				playerPool.remove("random");
-				binder.bind(7070, 7071, player, pl);
+				binder.bind(player, pl);
 			}
 
 		} else { // matchmaking with specific user
@@ -70,7 +85,7 @@ public class Server {
 					return;
 
 				playerPool.remove(pl.oponent);
-				binder.bind(7070, 7071, player, pl);
+				binder.bind(player, pl);
 			}
 
 		}

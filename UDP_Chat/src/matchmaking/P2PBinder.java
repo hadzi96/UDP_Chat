@@ -8,11 +8,11 @@ import java.net.SocketTimeoutException;
 public class P2PBinder {
 
 	private int MAX_BLOCK_TIME = 5000;
-	private int clientPort1, clientPort2;
+	private int clientPort1 = 7070, clientPort2 = 7071;
 	private Player p1, p2;
 	private String msg;
 
-	private DatagramSocket serverSocket1; 
+	private DatagramSocket serverSocket1;
 	private DatagramSocket serverSocket2;
 	private DatagramPacket receivePacket;
 	private InetAddress IPAddress1;
@@ -24,9 +24,7 @@ public class P2PBinder {
 	private int port2;
 	private String msgInfoOfClient2;
 
-	public void bind(int clientPort1, int clientPort2, Player p1, Player p2) {
-		this.clientPort1 = clientPort1;
-		this.clientPort2 = clientPort2;
+	public void bind(Player p1, Player p2) {
 		this.p1 = p1;
 		this.p2 = p2;
 

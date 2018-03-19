@@ -13,11 +13,13 @@ public class ServerThread implements Runnable {
 
 	private String msg;
 	private String[] request;
-	
-	String username = null;
-	String password = null;
-	String oponent = null;
-	Player player = null;
+
+	private String username = null;
+	private String password = null;
+	private String oponent = null;
+	private Player player = null;
+
+	private boolean logedIn = false;
 
 	public ServerThread(Socket sock, Server server) {
 		this.sock = sock;
@@ -42,18 +44,37 @@ public class ServerThread implements Runnable {
 					break;
 
 				request = msg.split(";");
-				if (request[0].equals("connect to player")) {
+				if (request.length < 3)
+					continue;
+
+				if (request[0].equals("connect to player") && logedIn) {
 					username = request[1];
 					oponent = request[2];
 					player = new Player(username, oponent, out);
 					server.matchmaking("connect", player);
-				}
-				else {
-					if(request[0].equals("login"))
-					{
+				} else { // LOG IN
+					if (request[0].equals("log in")) {
 						username = request[1];
 						password = request[2];
-						
+
+						if (server.logIn(username, password)) {
+							logedIn = true;
+							out.println("log in successfull;");
+						} else {
+							logedIn = false;
+							out.println("log in failed;");
+						}
+					} else { // REGISTRATION
+						if (request[0].equals("register")) {
+							username = request[1];
+							password = request[2];
+
+							if (server.register(username, password))
+								out.println("registration successfull;");
+							else {
+								out.println("registration failed;");
+							}
+						}
 					}
 				}
 			}
