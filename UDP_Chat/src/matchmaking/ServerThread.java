@@ -12,6 +12,12 @@ public class ServerThread implements Runnable {
 	private Server server;
 
 	private String msg;
+	private String[] request;
+	
+	String username = null;
+	String password = null;
+	String oponent = null;
+	Player player = null;
 
 	public ServerThread(Socket sock, Server server) {
 		this.sock = sock;
@@ -21,9 +27,6 @@ public class ServerThread implements Runnable {
 	@Override
 	public void run() {
 		try {
-			String username = null;
-			String oponent = null;
-			Player player = null;
 			System.out.println("[" + sock.getInetAddress() + " : " + sock.getPort() + "] Connected");
 
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()), true);
@@ -38,11 +41,20 @@ public class ServerThread implements Runnable {
 				if (msg == null)
 					break;
 
-				if (msg.split(";")[0].equals("connect to player")) {
-					username = msg.split(";")[1];
-					oponent = msg.split(";")[2];
+				request = msg.split(";");
+				if (request[0].equals("connect to player")) {
+					username = request[1];
+					oponent = request[2];
 					player = new Player(username, oponent, out);
-					server.checkPlayers("matchmaking", player);
+					server.matchmaking("connect", player);
+				}
+				else {
+					if(request[0].equals("login"))
+					{
+						username = request[1];
+						password = request[2];
+						
+					}
 				}
 			}
 			sock.close();
@@ -50,7 +62,7 @@ public class ServerThread implements Runnable {
 
 			// kada se diskonektuje da se proveri i izbaci iz playerPool
 			if (player != null) {
-				server.checkPlayers("remove", player);
+				server.matchmaking("remove", player);
 			}
 
 		} catch (Exception e) {

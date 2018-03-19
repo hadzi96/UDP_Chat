@@ -3,10 +3,14 @@ package matchmaking;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Server {
 
 	private HashMap<String, Player> playerPool = new HashMap<>(); // KEY = username ; VALUE = player
+	private HashMap<String, String> users = new HashMap<>(); // KEY = username; VLUE = password
+	private ReentrantLock lock = new ReentrantLock();
+	private P2PBinder binder = new P2PBinder();
 
 	public Server() throws Exception {
 
@@ -24,7 +28,17 @@ public class Server {
 
 	}
 
-	public synchronized void checkPlayers(String command, Player pl) {
+	public boolean logIn(String username, String password) {
+		lock.lock();
+		if (users.containsKey(username)) {
+			return true;
+		}
+
+		lock.unlock();
+		return false;
+	}
+
+	public synchronized void matchmaking(String command, Player pl) {
 
 		if (command.equals("remove")) {
 			if (pl.oponent.equals("random")) {
@@ -43,7 +57,7 @@ public class Server {
 			} else {
 				Player player = playerPool.get("random");
 				playerPool.remove("random");
-				new Thread(new BindingServer(7070, 7071, player, pl)).start();
+				binder.bind(7070, 7071, player, pl);
 			}
 
 		} else { // matchmaking with specific user
@@ -56,7 +70,7 @@ public class Server {
 					return;
 
 				playerPool.remove(pl.oponent);
-				new Thread(new BindingServer(7070, 7071, player, pl)).start();
+				binder.bind(7070, 7071, player, pl);
 			}
 
 		}
