@@ -12,7 +12,7 @@ public class P2PBinder {
 	private Player p1, p2;
 	private String msg;
 
-	private DatagramSocket serverSocket1;
+	private DatagramSocket serverSocket1; 
 	private DatagramSocket serverSocket2;
 	private DatagramPacket receivePacket;
 	private InetAddress IPAddress1;
