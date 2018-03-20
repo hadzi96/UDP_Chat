@@ -1,4 +1,4 @@
-package matchmaking;
+package server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
