@@ -4,9 +4,9 @@ import java.util.Scanner;
 
 public class InputThread implements Runnable {
 
-	private UDPHolePunchingClient client;
+	private UDPHolePuncher client;
 
-	public InputThread(UDPHolePunchingClient client) {
+	public InputThread(UDPHolePuncher client) {
 		super();
 		this.client = client;
 	}

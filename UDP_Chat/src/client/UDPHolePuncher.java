@@ -4,7 +4,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-public class UDPHolePunchingClient {
+public class UDPHolePuncher {
 
 	private byte[] sendData;
 	private DatagramPacket sendPacket;
@@ -20,7 +20,7 @@ public class UDPHolePunchingClient {
 	private boolean connected = false;
 	private int counter = 0;
 
-	public UDPHolePunchingClient(String serverIp, int serverPort, String oponent) throws Exception {
+	public UDPHolePuncher(String serverIp, int serverPort, String oponent) throws Exception {
 		clientSocket = new DatagramSocket();
 		sendData = (oponent+";").getBytes();
 		sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(serverIp), serverPort);
@@ -89,7 +89,7 @@ public class UDPHolePunchingClient {
 
 	public static void main(String[] args) {
 		try {
-			new UDPHolePunchingClient("hadziserver.ddns.net", 7070, "Hello");
+			new UDPHolePuncher("hadziserver.ddns.net", 7070, "Hello");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
