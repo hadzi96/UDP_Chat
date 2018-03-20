@@ -82,7 +82,7 @@ public class Client {
 		}
 
 		sock.close();
-		System.out.println("pokrenuo udp punching na portu: " + UDP_port);
+		System.out.println("start udp hole punching on port: " + UDP_port);
 		new UDPHolePuncher(host, UDP_port, oponent);
 	}
 
